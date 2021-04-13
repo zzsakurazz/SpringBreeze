@@ -2,7 +2,11 @@ package zz.weather.example.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val colorDay = Color(0xFF51C0F8)
+val colorNight = Color(0xFF7F9EE9)
+val colorWaveStartNight = Color(0x1A3A66CF)
+val colorWaveEndNightRear = Color(0x803A66CF)
+val colorWaveEndNightFront = Color(0xE63A66CF)
+val colorWaveStartDay = Color(0x1AFFFFFF)
+val colorWaveEndDayRear = Color(0x80FFFFFF)
+val colorWaveEndDayFront = Color(0xE6FFFFFF)
