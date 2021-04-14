@@ -21,6 +21,8 @@ import zz.weather.example.ui.theme.colorDay
 import androidx.constraintlayout.compose.ConstraintLayout
 import zz.weather.example.ui.widget.DividerAlpha
 import zz.weather.example.ui.widget.VerticalDivider
+import zz.weather.example.vm.AirNowBeanState
+import zz.weather.example.vm.WeatherNowBeanState
 
 /**
  * @author zhangzheng
@@ -30,7 +32,7 @@ import zz.weather.example.ui.widget.VerticalDivider
  * Desc :
  */
 @Composable
-fun HomePage() {
+fun HomePage(weatherData: WeatherNowBeanState?, airNowData: AirNowBeanState?) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -43,7 +45,7 @@ fun HomePage() {
                         color = colorDay
                     ),
             ) {
-                weatherInfoTpoWidget()
+                weatherInfoTpoWidget(weatherData,airNowData)
             }
         },
     )
@@ -53,7 +55,7 @@ fun HomePage() {
  * 顶部数据widget
  */
 @Composable
-fun weatherInfoTpoWidget() {
+fun weatherInfoTpoWidget(weatherData: WeatherNowBeanState?, airNowData: AirNowBeanState?) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -62,7 +64,7 @@ fun weatherInfoTpoWidget() {
             val (temp, info) = createRefs()
             Text(
                 fontSize = 84.sp,
-                text = "23°",
+                text = "${weatherData?.temp ?: "--"}°",
                 color = Color.White,
                 modifier = Modifier.constrainAs(temp) {
                     start.linkTo(parent.start)
@@ -80,7 +82,7 @@ fun weatherInfoTpoWidget() {
             ) {
                 Text(
                     fontSize = 20.sp,
-                    text = "晴",
+                    text = weatherData?.text ?: "未知",
                     color = Color.White,
                 )
                 Box(Modifier.height(4.dp))
@@ -96,11 +98,14 @@ fun weatherInfoTpoWidget() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            MoreInfo("19%", "湿度")
+            MoreInfo("${weatherData?.humidity ?: "--"}%", "湿度")
             VerticalDivider(height = 35.dp, color = Color.White.copy(alpha = DividerAlpha))
-            MoreInfo("1027", "气压")
+            MoreInfo(airNowData?.pm2p5?:"", "pm2.5")
             VerticalDivider(height = 35.dp, color = Color.White.copy(alpha = DividerAlpha))
-            MoreInfo("5级", "南风")
+            MoreInfo(
+                "${weatherData?.windScale ?: "--"}级",
+                if (weatherData?.windDir.isNullOrEmpty()) "风力" else weatherData?.windDir ?: ""
+            )
 
         }
 
@@ -151,7 +156,7 @@ private fun MaxTemp(temp: String, type: Boolean) {
 @Composable
 fun DefaultPreview() {
     SpringBreezeTheme {
-        HomePage()
+        HomePage(null, null)
     }
 }
 
