@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import zz.weather.example.ui.theme.SpringBreezeTheme
 
 /**
  * @author zhangzheng
@@ -46,4 +48,10 @@ fun MaxTemp(temp: String, type: Boolean) {
             modifier = Modifier.padding(start = 4.dp)
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MaxTempPreview() {
+    SpringBreezeTheme { MaxTemp("12",false)}
 }
