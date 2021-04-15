@@ -23,7 +23,7 @@ fun VerticalDivider(
     thickness: Dp = 1.dp,
     height: Dp = 0.dp
 ) {
-    Box(
+    Spacer(
         modifier
             .width(thickness)
             .height(height)

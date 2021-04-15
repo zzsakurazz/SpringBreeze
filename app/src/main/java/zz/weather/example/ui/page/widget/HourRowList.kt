@@ -16,35 +16,29 @@ import androidx.compose.ui.unit.sp
 import com.qweather.sdk.bean.weather.WeatherDailyBean
 import zz.weather.example.R
 import zz.weather.example.ui.theme.SpringBreezeTheme
-
-/**
- * @author zhangzheng
- * @Date  2021/4/15 11:03 上午
- * @ClassName HourRowList
- * <p>
- * Desc :
- */
+import zz.weather.example.ui.theme.colorTextDefault
 
 @Composable
 fun HourRowList(datas: List<WeatherDailyBean.DailyBean>?) {
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 23.dp, vertical = 23.dp),
-        horizontalArrangement = Arrangement.spacedBy(28.dp),
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = 23.dp, vertical = 23.dp),//边距距离
+        horizontalArrangement = Arrangement.spacedBy(28.dp),//内部item间距
     ) {
         datas?.let {
             itemsIndexed(items = it) { _, item ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "12°C", fontSize = 14.sp, fontWeight = FontWeight.W400)
-                    Box(Modifier.height(10.dp))
+                    Text(text = "12°C", fontSize = 14.sp, fontWeight = FontWeight.W400,color = colorTextDefault)
+                    Spacer(Modifier.height(10.dp))
                     Image(
                         painter = painterResource(id = R.drawable.icon_103),
                         contentDescription = null,
                         Modifier.size(20.dp)
                     )
-                    Box(Modifier.height(10.dp))
-                    Text(text = "12:00", fontSize = 12.sp)
+                    Spacer(Modifier.height(10.dp))
+                    Text(text = "12:00", fontSize = 12.sp,color = colorTextDefault)
                 }
             }
         }

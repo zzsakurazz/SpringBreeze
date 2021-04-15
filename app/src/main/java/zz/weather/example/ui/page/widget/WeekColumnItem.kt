@@ -1,0 +1,37 @@
+package zz.weather.example.ui.page.widget
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.qweather.sdk.bean.weather.WeatherDailyBean
+import zz.weather.example.R
+import zz.weather.example.ui.theme.colorTextDefault
+
+@Composable
+fun WeekColumnItem(data: WeatherDailyBean.DailyBean) {
+    Row(
+        modifier=Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 23.dp, vertical = 16.dp),
+    ) {
+        Box( modifier=Modifier.weight(1F),contentAlignment = Alignment.CenterStart) {
+            Text(text = data.fxDate,color = colorTextDefault)
+        }
+        Box( modifier=Modifier.weight(1F),contentAlignment = Alignment.Center) {
+            Image(
+                painter = painterResource(id = R.drawable.icon_103),
+                contentDescription = null,
+                Modifier.size(20.dp)
+            )
+        }
+        Box( modifier=Modifier.weight(1F),contentAlignment = Alignment.CenterEnd) {
+            Text(text = "${data.tempMax} / ${data.tempMin}",color = colorTextDefault)
+        }
+    }
+
+}

@@ -19,15 +19,8 @@ import zz.weather.example.ui.theme.colorDay
 import zz.weather.example.ui.theme.colorNight
 import zz.weather.example.ui.view.DividerAlpha
 import zz.weather.example.ui.view.VerticalDivider
+import zz.weather.example.utlis.getStatusBarHeight
 import zz.weather.example.utlis.isNight
-
-/**
- * @author zhangzheng
- * @Date  2021/4/14 6:27 下午
- * @ClassName WeatherInfoTpoWidget
- * <p>
- * Desc :
- */
 
 /**
  * 顶部数据widget
@@ -46,6 +39,15 @@ fun WeatherInfoTpoWidget(
                 color = if (isNight()) colorNight else colorDay
             ),
     ) {
+        Row(
+            Modifier
+                .height(60.dp)//todo 处理顶部状态栏高度问题
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(text = "北京", color = Color.White, fontSize = 16.sp)
+        }
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -75,9 +77,9 @@ fun WeatherInfoTpoWidget(
                         text = weatherData?.text ?: "未知",
                         color = Color.White,
                     )
-                    Box(Modifier.height(4.dp))
+                    Spacer(Modifier.height(4.dp))
                     MaxTemp(weatherWeekData?.dailyList?.get(0)?.tempMax ?: "--", true)
-                    Box(Modifier.height(8.dp))
+                    Spacer(Modifier.height(8.dp))
                     MaxTemp(weatherWeekData?.dailyList?.get(0)?.tempMin ?: "--", false)
                 }
             }

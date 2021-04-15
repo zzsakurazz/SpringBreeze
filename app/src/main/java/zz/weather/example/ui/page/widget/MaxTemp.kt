@@ -15,13 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import zz.weather.example.ui.theme.SpringBreezeTheme
 
-/**
- * @author zhangzheng
- * @Date  2021/4/14 6:26 下午
- * @ClassName MaxTemp
- * <p>
- * Desc :
- */
 
 /**
  * 最高/最低温度

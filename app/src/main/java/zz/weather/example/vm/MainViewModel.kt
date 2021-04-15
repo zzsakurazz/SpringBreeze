@@ -75,9 +75,11 @@ class MainViewModel : ViewModel() {
             object : QWeather.OnResultWeatherHourlyListener {
                 override fun onError(error: Throwable?) {
                     error?.printStackTrace()
+                    error?.message?.let { Log.e("zz", it) }
                 }
 
                 override fun onSuccess(data: WeatherHourlyBean?) {
+                    Log.e("zz","获取到数据啦！！！")
                     data?.let {
                         _weather24HourlyData.value = Weather24HourlyState(data.hourly)
                     }

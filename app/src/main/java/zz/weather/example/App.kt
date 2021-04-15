@@ -1,6 +1,7 @@
 package zz.weather.example
 
 import android.app.Application
+import android.content.Context
 import com.qweather.sdk.view.HeConfig
 
 /**

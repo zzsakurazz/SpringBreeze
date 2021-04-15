@@ -11,3 +11,5 @@ val colorWaveEndNightFront = Color(0xE63A66CF)
 val colorWaveStartDay = Color(0x1AFFFFFF)
 val colorWaveEndDayRear = Color(0x80FFFFFF)
 val colorWaveEndDayFront = Color(0xE6FFFFFF)
+
+val colorTextDefault = Color(0xFF333333)
