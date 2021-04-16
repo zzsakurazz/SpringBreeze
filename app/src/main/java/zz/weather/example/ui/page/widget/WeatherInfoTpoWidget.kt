@@ -19,7 +19,6 @@ import zz.weather.example.ui.theme.colorDay
 import zz.weather.example.ui.theme.colorNight
 import zz.weather.example.ui.view.DividerAlpha
 import zz.weather.example.ui.view.VerticalDivider
-import zz.weather.example.utlis.getStatusBarHeight
 import zz.weather.example.utlis.isNight
 
 /**

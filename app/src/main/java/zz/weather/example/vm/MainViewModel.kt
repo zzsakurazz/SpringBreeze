@@ -6,7 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amap.api.location.AMapLocation
+import com.qweather.sdk.bean.IndicesBean
 import com.qweather.sdk.bean.air.AirNowBean
+import com.qweather.sdk.bean.base.IndicesType
 import com.qweather.sdk.bean.base.Lang
 import com.qweather.sdk.bean.geo.GeoBean
 import com.qweather.sdk.bean.weather.WeatherDailyBean
@@ -67,9 +69,14 @@ class MainViewModel : ViewModel() {
                 }
 
             })
+
+
     }
 
+
     private fun resultWeatherWeek(context: Context, id: String?) {
+        val list= mutableListOf<IndicesType>()
+        list.add(IndicesType.ALL)
         QWeather.getWeather7D(
             context,
             id,
@@ -88,15 +95,13 @@ class MainViewModel : ViewModel() {
     }
 
     private fun resultWeather24Hourly(context: Context, id: String?) {
-        QWeather.getWeather72Hourly(context, id,
+        QWeather.getWeather24Hourly(context, id,
             object : QWeather.OnResultWeatherHourlyListener {
                 override fun onError(error: Throwable?) {
                     error?.printStackTrace()
-                    error?.message?.let { Log.e("zz", it) }
                 }
 
                 override fun onSuccess(data: WeatherHourlyBean?) {
-                    Log.e("zz", "获取到数据啦！！！")
                     data?.let {
                         _weather24HourlyData.value = Weather24HourlyState(data.hourly)
                     }

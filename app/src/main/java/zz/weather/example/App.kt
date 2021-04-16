@@ -1,9 +1,7 @@
 package zz.weather.example
 
 import android.app.Application
-import android.content.Context
 import com.qweather.sdk.view.HeConfig
-import zz.weather.example.utlis.LocationManager
 
 /**
  * @author zhangzheng

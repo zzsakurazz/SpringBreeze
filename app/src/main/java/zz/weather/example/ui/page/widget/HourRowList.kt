@@ -17,20 +17,27 @@ import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import zz.weather.example.R
 import zz.weather.example.ui.theme.SpringBreezeTheme
 import zz.weather.example.ui.theme.colorTextDefault
+import zz.weather.example.utlis.UTC_TIME
+import zz.weather.example.utlis.formatDate
 
 @Composable
 fun HourRowList(datas: List<WeatherHourlyBean.HourlyBean>?) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 23.dp, vertical = 23.dp),//边距距离
-        horizontalArrangement = Arrangement.spacedBy(28.dp),//内部item间距
+        horizontalArrangement = Arrangement.spacedBy(38.dp),//内部item间距
     ) {
         datas?.let {
             itemsIndexed(items = it) { _, item ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "${item.temp}°C", fontSize = 14.sp, fontWeight = FontWeight.W400,color = colorTextDefault)
+                    Text(
+                        text = "${item.temp}°C",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.W400,
+                        color = colorTextDefault
+                    )
                     Spacer(Modifier.height(10.dp))
                     Image(
                         painter = painterResource(id = R.drawable.icon_103),
@@ -38,11 +45,19 @@ fun HourRowList(datas: List<WeatherHourlyBean.HourlyBean>?) {
                         Modifier.size(20.dp)
                     )
                     Spacer(Modifier.height(10.dp))
-                    Text(text = "${item.fxTime}", fontSize = 12.sp,color = colorTextDefault)
+                    Text(
+                        text = processTime(formatDate(UTC_TIME, "HH", item.fxTime)),
+                        fontSize = 12.sp,
+                        color = colorTextDefault
+                    )
                 }
             }
         }
     }
+}
+
+fun processTime(time: String): String {
+    return "${time}:00"
 }
 
 @Preview(showBackground = true)

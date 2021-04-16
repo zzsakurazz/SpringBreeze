@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import com.qweather.sdk.bean.weather.WeatherDailyBean
 import zz.weather.example.R
 import zz.weather.example.ui.theme.colorTextDefault
+import zz.weather.example.utlis.dateToWeek
+import zz.weather.example.utlis.formatDate
 
 @Composable
 fun WeekColumnItem(data: WeatherDailyBean.DailyBean) {
@@ -20,7 +22,7 @@ fun WeekColumnItem(data: WeatherDailyBean.DailyBean) {
             .padding(horizontal = 23.dp, vertical = 16.dp),
     ) {
         Box( modifier=Modifier.weight(1F),contentAlignment = Alignment.CenterStart) {
-            Text(text = data.fxDate,color = colorTextDefault)
+            Text(text = dateToWeek("yyyy-MM-dd",data.fxDate) ,color = colorTextDefault)
         }
         Box( modifier=Modifier.weight(1F),contentAlignment = Alignment.Center) {
             Image(
