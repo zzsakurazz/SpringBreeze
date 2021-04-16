@@ -1,33 +1,26 @@
 package zz.weather.example.ui.view.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import zz.weather.example.bean.AirNowBeanState
+import zz.weather.example.bean.Weather24HourlyState
 import zz.weather.example.bean.WeatherNowBeanState
 import zz.weather.example.bean.WeatherWeekState
 import zz.weather.example.ui.page.widget.HourRowList
 import zz.weather.example.ui.theme.SpringBreezeTheme
-import zz.weather.example.ui.theme.colorDay
 import zz.weather.example.ui.page.widget.WeatherInfoTpoWidget
 import zz.weather.example.ui.page.widget.WeekColumnItem
-import zz.weather.example.ui.theme.colorNight
 import zz.weather.example.ui.theme.colorTextDefault
-import zz.weather.example.utlis.isNight
 
 /**
  * @author zhangzheng
@@ -38,12 +31,13 @@ import zz.weather.example.utlis.isNight
  */
 @Composable
 fun HomePage(
+    city: String?,
     weatherData: WeatherNowBeanState?,
     airNowData: AirNowBeanState?,
+    weather24HourlyData: Weather24HourlyState?,
     weatherWeekData: WeatherWeekState?
 ) {
     val scaffoldState = rememberScaffoldState()
-    val scrollState = rememberScrollState()
     Scaffold(
         scaffoldState = scaffoldState,
         //屏幕内容区域
@@ -55,10 +49,10 @@ fun HomePage(
             ) {
                 //当前天气信息widget
                 item {
-                    WeatherInfoTpoWidget(weatherData, airNowData, weatherWeekData)
+                    WeatherInfoTpoWidget(city,weatherData, airNowData, weatherWeekData)
                 }
                 item {
-                    HourRowList(weatherWeekData?.dailyList)
+                    HourRowList(weather24HourlyData?.hourlyList)
                 }
                 weatherWeekData?.dailyList?.let {
                     itemsIndexed(items = it) { index, item ->
@@ -68,7 +62,7 @@ fun HomePage(
                 item {
                     Text(
                         text = "数据来源:和风天气",
-                        Modifier.padding(top = 20.dp,bottom = 20.dp),
+                        Modifier.padding(top = 20.dp, bottom = 20.dp),
                         fontSize = 12.sp,
                         color = colorTextDefault
                     )
@@ -83,7 +77,7 @@ fun HomePage(
 @Composable
 fun DefaultPreview() {
     SpringBreezeTheme {
-        HomePage(null, null, null)
+        HomePage("北京", null, null, null, null)
     }
 }
 

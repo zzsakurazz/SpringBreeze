@@ -27,6 +27,7 @@ import zz.weather.example.utlis.isNight
  */
 @Composable
 fun WeatherInfoTpoWidget(
+    city: String?,
     weatherData: WeatherNowBeanState?,
     airNowData: AirNowBeanState?,
     weatherWeekData: WeatherWeekState?
@@ -46,7 +47,7 @@ fun WeatherInfoTpoWidget(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
         ) {
-            Text(text = "北京", color = Color.White, fontSize = 16.sp)
+            Text(text = city?:"城市", color = Color.White, fontSize = 16.sp)
         }
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -110,5 +111,5 @@ fun WeatherInfoTpoWidget(
 @Preview(showBackground = true)
 @Composable
 fun WeatherInfoTpoWidgetPreview() {
-    SpringBreezeTheme { WeatherInfoTpoWidget(null, null, null) }
+    SpringBreezeTheme { WeatherInfoTpoWidget("北京",null, null, null) }
 }

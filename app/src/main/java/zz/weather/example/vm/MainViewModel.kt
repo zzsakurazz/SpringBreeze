@@ -2,10 +2,10 @@ package zz.weather.example.vm
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.runtime.Immutable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.amap.api.location.AMapLocation
 import com.qweather.sdk.bean.air.AirNowBean
 import com.qweather.sdk.bean.base.Lang
 import com.qweather.sdk.bean.geo.GeoBean
@@ -17,7 +17,6 @@ import zz.weather.example.bean.AirNowBeanState
 import zz.weather.example.bean.Weather24HourlyState
 import zz.weather.example.bean.WeatherNowBeanState
 import zz.weather.example.bean.WeatherWeekState
-import kotlin.math.log
 
 /**
  * @author zhangzheng
@@ -45,30 +44,35 @@ class MainViewModel : ViewModel() {
     private val _weatherWeekData = MutableLiveData<WeatherWeekState>()
     val weatherWeekData: LiveData<WeatherWeekState> = _weatherWeekData
 
-    private val _location = MutableLiveData("116.28696,39.86364")
+    //一周天气数据
+    private val _city = MutableLiveData<String>()
+    val city: LiveData<String> = _city
 
-    fun refreshWatherData(context: Context) {
-        resultWeatherNowData(context)
-        resultAirNow(context)
-        resultWeather24Hourly(context)
-        resultWeatherWeek(context)
-        QWeather.getGeoCityLookup(context,"丰台区",object :QWeather.OnResultGeoListener{
-            override fun onError(p0: Throwable?) {
-            }
-            override fun onSuccess(data: GeoBean?) {
-                Log.e("zz","${data?.locationBean?.get(0)?.name}")
-                Log.e("zz","${data?.locationBean?.get(0)?.lon}")
-                Log.e("zz","${data?.locationBean?.get(0)?.lat}")
-                Log.e("zz","${data?.locationBean?.get(0)?.id}")
-            }
 
-        })
+    fun refreshWatherData(context: Context, location: AMapLocation) {
+        _city.value=if(location.district.isNullOrEmpty()) location.city else location.district
+        QWeather.getGeoCityLookup(
+            context,
+            _city.value,
+            object : QWeather.OnResultGeoListener {
+                override fun onError(p0: Throwable?) {
+
+                }
+
+                override fun onSuccess(data: GeoBean?) {
+                    resultWeatherNowData(context, data?.locationBean?.get(0)?.id)
+                    resultAirNow(context, data?.locationBean?.get(0)?.id)
+                    resultWeather24Hourly(context, data?.locationBean?.get(0)?.id)
+                    resultWeatherWeek(context, data?.locationBean?.get(0)?.id)
+                }
+
+            })
     }
 
-    private fun resultWeatherWeek(context: Context) {
+    private fun resultWeatherWeek(context: Context, id: String?) {
         QWeather.getWeather7D(
             context,
-            _location.value,
+            id,
             object : QWeather.OnResultWeatherDailyListener {
                 override fun onError(error: Throwable?) {
                     error?.printStackTrace()
@@ -83,8 +87,8 @@ class MainViewModel : ViewModel() {
             })
     }
 
-    private fun resultWeather24Hourly(context: Context) {
-        QWeather.getWeather72Hourly(context, _location.value,
+    private fun resultWeather24Hourly(context: Context, id: String?) {
+        QWeather.getWeather72Hourly(context, id,
             object : QWeather.OnResultWeatherHourlyListener {
                 override fun onError(error: Throwable?) {
                     error?.printStackTrace()
@@ -92,7 +96,7 @@ class MainViewModel : ViewModel() {
                 }
 
                 override fun onSuccess(data: WeatherHourlyBean?) {
-                    Log.e("zz","获取到数据啦！！！")
+                    Log.e("zz", "获取到数据啦！！！")
                     data?.let {
                         _weather24HourlyData.value = Weather24HourlyState(data.hourly)
                     }
@@ -101,10 +105,10 @@ class MainViewModel : ViewModel() {
 
     }
 
-    private fun resultAirNow(context: Context) {
+    private fun resultAirNow(context: Context, id: String?) {
         QWeather.getAirNow(
             context,
-            _location.value,
+            id,
             Lang.ZH_HANS,
             object : QWeather.OnResultAirNowListener {
                 override fun onError(error: Throwable?) {
@@ -121,10 +125,10 @@ class MainViewModel : ViewModel() {
     }
 
     //获取当前天气数据
-    private fun resultWeatherNowData(context: Context) {
+    private fun resultWeatherNowData(context: Context, id: String?) {
         QWeather.getWeatherNow(
             context,
-            _location.value,
+            id,
             object : QWeather.OnResultWeatherNowListener {
                 override fun onError(error: Throwable?) {
                     error?.printStackTrace()

@@ -1,15 +1,15 @@
 package zz.weather.example
 
 import android.Manifest
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.view.WindowCompat
+import com.amap.api.location.AMapLocationClient
+import com.amap.api.location.AMapLocationClientOption
 import com.google.accompanist.insets.ProvideWindowInsets
 import pub.devrel.easypermissions.AfterPermissionGranted
 import zz.weather.example.ui.view.home.HomePage
@@ -17,14 +17,40 @@ import zz.weather.example.ui.theme.SpringBreezeTheme
 import zz.weather.example.vm.MainViewModel
 import pub.devrel.easypermissions.EasyPermissions
 import zz.weather.example.PermissionConfig.RC_CAMERA_AND_LOCATION
+import zz.weather.example.utlis.LocationManager
 
 
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
+    private var mLocationClient: AMapLocationClient? = null
+    private val mLocationOption = AMapLocationClientOption()
+    private var option = AMapLocationClientOption()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
         initData()
+        LocationManager.initManager(this)
+    }
+
+    private fun initLocation() {
+        mLocationClient = AMapLocationClient(this)
+        //定位场景
+        option.locationPurpose = AMapLocationClientOption.AMapLocationPurpose.Transport
+        mLocationClient?.setLocationOption(option)
+        //定位精度
+        mLocationOption.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
+        ///定位一次
+        mLocationClient?.setLocationOption(mLocationOption)
+        mLocationClient?.startLocation()
+        mLocationClient?.setLocationListener { location ->
+            if(location.errorCode==0){
+                viewModel.refreshWatherData(this,location)
+            }else{
+              // todo 失败处理
+            }
+            mLocationClient?.stopLocation()
+        }
 
     }
 
@@ -35,8 +61,7 @@ class MainActivity : ComponentActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        // Forward results to EasyPermissions
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     private fun initView() {
@@ -45,9 +70,11 @@ class MainActivity : ComponentActivity() {
             val weatherData by viewModel.weatherData.observeAsState()
             val airNowData by viewModel.airNowData.observeAsState()
             val weatherWeekData by viewModel.weatherWeekData.observeAsState()
+            val weather24HourlyData by viewModel.weather24HourlyData.observeAsState()
+            val city by viewModel.city.observeAsState()
             SpringBreezeTheme {
                 ProvideWindowInsets {
-                    HomePage(weatherData, airNowData, weatherWeekData)
+                    HomePage(city,weatherData, airNowData,weather24HourlyData ,weatherWeekData)
                 }
             }
         }
@@ -69,7 +96,7 @@ class MainActivity : ComponentActivity() {
             Manifest.permission.FOREGROUND_SERVICE,
         )
         if (EasyPermissions.hasPermissions(this,*perms)) {
-            viewModel.refreshWatherData(this)
+            initLocation()
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, "请提供一下这些权限吧，秋梨膏", RC_CAMERA_AND_LOCATION,*perms)

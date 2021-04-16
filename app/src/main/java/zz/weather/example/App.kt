@@ -3,6 +3,7 @@ package zz.weather.example
 import android.app.Application
 import android.content.Context
 import com.qweather.sdk.view.HeConfig
+import zz.weather.example.utlis.LocationManager
 
 /**
  * @author zhangzheng
@@ -14,8 +15,14 @@ import com.qweather.sdk.view.HeConfig
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        //初始化SDK
+        //初始化和风SDK
         initQWeather()
+
+        initMap()
+    }
+
+    private fun initMap() {
+
     }
 
     private fun initQWeather() {
