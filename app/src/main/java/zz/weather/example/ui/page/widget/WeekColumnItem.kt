@@ -11,28 +11,29 @@ import androidx.compose.ui.unit.dp
 import com.qweather.sdk.bean.weather.WeatherDailyBean
 import zz.weather.example.R
 import zz.weather.example.ui.theme.colorTextDefault
+import zz.weather.example.utlis.codeToIcon
 import zz.weather.example.utlis.dateToWeek
 import zz.weather.example.utlis.formatDate
 
 @Composable
 fun WeekColumnItem(data: WeatherDailyBean.DailyBean) {
     Row(
-        modifier=Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 23.dp, vertical = 16.dp),
     ) {
-        Box( modifier=Modifier.weight(1F),contentAlignment = Alignment.CenterStart) {
-            Text(text = dateToWeek("yyyy-MM-dd",data.fxDate) ,color = colorTextDefault)
+        Box(modifier = Modifier.weight(1F), contentAlignment = Alignment.CenterStart) {
+            Text(text = dateToWeek("yyyy-MM-dd", data.fxDate), color = colorTextDefault)
         }
-        Box( modifier=Modifier.weight(1F),contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.weight(1F), contentAlignment = Alignment.Center) {
             Image(
-                painter = painterResource(id = R.drawable.icon_103),
+                painter = painterResource(id = codeToIcon(data.iconDay.toInt())),
                 contentDescription = null,
                 Modifier.size(20.dp)
             )
         }
-        Box( modifier=Modifier.weight(1F),contentAlignment = Alignment.CenterEnd) {
-            Text(text = "${data.tempMax} / ${data.tempMin}",color = colorTextDefault)
+        Box(modifier = Modifier.weight(1F), contentAlignment = Alignment.CenterEnd) {
+            Text(text = "${data.tempMax} / ${data.tempMin}", color = colorTextDefault)
         }
     }
 

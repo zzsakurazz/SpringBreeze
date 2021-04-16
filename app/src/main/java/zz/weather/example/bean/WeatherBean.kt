@@ -24,7 +24,7 @@ data class WeatherNowBeanState(
 
 @Immutable
 data class AirNowBeanState(
-    val pm2p5: String,//实时温度
+    val pm2p5: String,//实时空气质量
 )
 
 @Immutable
