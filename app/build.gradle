@@ -18,11 +18,37 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-    }
 
+        ndk {
+            //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","arm64-v8a","x86_64"
+        }
+    }
+    signingConfigs {
+        release {
+            storeFile file('../key.jks')
+            storePassword "1q2w3e"
+            keyAlias 'key'
+            keyPassword "1q2w3e"
+        }
+
+        debug {
+            storeFile file('../key.jks')
+            storePassword "1q2w3e"
+            keyAlias 'key'
+            keyPassword "1q2w3e"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug{
+            minifyEnabled false
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -84,4 +110,10 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha05"
     implementation "com.google.accompanist:accompanist-insets:0.7.1"
     implementation "com.google.accompanist:accompanist-coil:0.7.1"
+
+    //高德定位
+    implementation 'com.amap.api:location:5.3.1'
+
+    // For developers using AndroidX in their applications
+    implementation 'pub.devrel:easypermissions:3.0.0'
 }

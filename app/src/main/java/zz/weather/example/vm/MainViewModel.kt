@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.qweather.sdk.bean.air.AirNowBean
 import com.qweather.sdk.bean.base.Lang
+import com.qweather.sdk.bean.geo.GeoBean
 import com.qweather.sdk.bean.weather.WeatherDailyBean
 import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import com.qweather.sdk.bean.weather.WeatherNowBean
@@ -16,6 +17,7 @@ import zz.weather.example.bean.AirNowBeanState
 import zz.weather.example.bean.Weather24HourlyState
 import zz.weather.example.bean.WeatherNowBeanState
 import zz.weather.example.bean.WeatherWeekState
+import kotlin.math.log
 
 /**
  * @author zhangzheng
@@ -43,13 +45,24 @@ class MainViewModel : ViewModel() {
     private val _weatherWeekData = MutableLiveData<WeatherWeekState>()
     val weatherWeekData: LiveData<WeatherWeekState> = _weatherWeekData
 
-    private val _location = MutableLiveData("116.41,39.92")
+    private val _location = MutableLiveData("116.28696,39.86364")
 
     fun refreshWatherData(context: Context) {
         resultWeatherNowData(context)
         resultAirNow(context)
         resultWeather24Hourly(context)
         resultWeatherWeek(context)
+        QWeather.getGeoCityLookup(context,"丰台区",object :QWeather.OnResultGeoListener{
+            override fun onError(p0: Throwable?) {
+            }
+            override fun onSuccess(data: GeoBean?) {
+                Log.e("zz","${data?.locationBean?.get(0)?.name}")
+                Log.e("zz","${data?.locationBean?.get(0)?.lon}")
+                Log.e("zz","${data?.locationBean?.get(0)?.lat}")
+                Log.e("zz","${data?.locationBean?.get(0)?.id}")
+            }
+
+        })
     }
 
     private fun resultWeatherWeek(context: Context) {
