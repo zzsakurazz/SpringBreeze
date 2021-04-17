@@ -1,4 +1,4 @@
-package zz.weather.example
+package zz.weather.example.config
 
 /**
  * @author zhangzheng
