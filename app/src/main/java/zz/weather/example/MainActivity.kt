@@ -1,12 +1,10 @@
 package zz.weather.example
 
 import android.Manifest
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.view.WindowCompat
@@ -18,7 +16,7 @@ import zz.weather.example.ui.view.home.HomePage
 import zz.weather.example.ui.theme.SpringBreezeTheme
 import zz.weather.example.vm.MainViewModel
 import pub.devrel.easypermissions.EasyPermissions
-import zz.weather.example.PermissionConfig.RC_CAMERA_AND_LOCATION
+import zz.weather.example.config.PermissionConfig.RC_CAMERA_AND_LOCATION
 
 
 class MainActivity : ComponentActivity() {

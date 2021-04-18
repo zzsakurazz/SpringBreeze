@@ -119,7 +119,6 @@ class MainViewModel : ViewModel() {
                 override fun onError(error: Throwable?) {
                     error?.printStackTrace()
                 }
-
                 override fun onSuccess(data: AirNowBean?) {
                     data?.let {
                         _airNowData.value = AirNowBeanState(data.now.pm2p5)

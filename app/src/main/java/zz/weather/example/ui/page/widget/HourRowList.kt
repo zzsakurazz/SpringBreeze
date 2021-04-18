@@ -14,10 +14,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.qweather.sdk.bean.weather.WeatherHourlyBean
-import zz.weather.example.R
 import zz.weather.example.ui.theme.SpringBreezeTheme
 import zz.weather.example.ui.theme.colorTextDefault
 import zz.weather.example.utlis.UTC_TIME
+import zz.weather.example.utlis.codeToIcon
 import zz.weather.example.utlis.formatDate
 
 @Composable
@@ -40,7 +40,7 @@ fun HourRowList(datas: List<WeatherHourlyBean.HourlyBean>?) {
                     )
                     Spacer(Modifier.height(10.dp))
                     Image(
-                        painter = painterResource(id = R.drawable.icon_103),
+                        painter = painterResource(id = codeToIcon(item.icon.toInt())),
                         contentDescription = null,
                         Modifier.size(20.dp)
                     )
