@@ -7,6 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.core.view.WindowCompat
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -49,7 +52,6 @@ class MainActivity : ComponentActivity() {
             }
             mLocationClient?.stopLocation()
         }
-
     }
 
     //处理权限
@@ -69,10 +71,13 @@ class MainActivity : ComponentActivity() {
             val airNowData by viewModel.airNowData.observeAsState()
             val weatherWeekData by viewModel.weatherWeekData.observeAsState()
             val weather24HourlyData by viewModel.weather24HourlyData.observeAsState()
+            val refreshing by viewModel.refreshing.observeAsState()
             val city by viewModel.city.observeAsState()
             SpringBreezeTheme {
                 ProvideWindowInsets {
-                    HomePage(city,weatherData, airNowData,weather24HourlyData ,weatherWeekData)
+                    HomePage(city,weatherData, airNowData,weather24HourlyData ,weatherWeekData,refreshing) {
+                        mLocationClient?.startLocation()
+                    }
                 }
             }
         }

@@ -50,18 +50,24 @@ class MainViewModel : ViewModel() {
     private val _city = MutableLiveData<String>()
     val city: LiveData<String> = _city
 
+    private val _refreshing=MutableLiveData(false)
+    val refreshing: LiveData<Boolean> = _refreshing
 
     fun refreshWatherData(context: Context, location: AMapLocation) {
+        _refreshing.value=true
         _city.value=if(location.district.isNullOrEmpty()) location.city else location.district
         QWeather.getGeoCityLookup(
             context,
             _city.value,
             object : QWeather.OnResultGeoListener {
-                override fun onError(p0: Throwable?) {
 
+
+                override fun onError(p0: Throwable?) {
+                    _refreshing.value=false
                 }
 
                 override fun onSuccess(data: GeoBean?) {
+                    _refreshing.value=false
                     resultWeatherNowData(context, data?.locationBean?.get(0)?.id)
                     resultAirNow(context, data?.locationBean?.get(0)?.id)
                     resultWeather24Hourly(context, data?.locationBean?.get(0)?.id)

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import zz.weather.example.widget.refreshlayout.SwipeRefreshLayout
 import zz.weather.example.bean.AirNowBeanState
 import zz.weather.example.bean.Weather24HourlyState
 import zz.weather.example.bean.WeatherNowBeanState
@@ -35,7 +36,9 @@ fun HomePage(
     weatherData: WeatherNowBeanState?,
     airNowData: AirNowBeanState?,
     weather24HourlyData: Weather24HourlyState?,
-    weatherWeekData: WeatherWeekState?
+    weatherWeekData: WeatherWeekState?,
+    refreshing:Boolean?,
+    onRefresh: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
@@ -43,29 +46,31 @@ fun HomePage(
         //屏幕内容区域
         content = {
             //TODO 嵌套待优化
-            LazyColumn(
-                Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                //当前天气信息widget
-                item {
-                    WeatherInfoTpoWidget(city,weatherData, airNowData, weatherWeekData)
-                }
-                item {
-                    HourRowList(weather24HourlyData?.hourlyList)
-                }
-                weatherWeekData?.dailyList?.let {
-                    itemsIndexed(items = it) { index, item ->
-                        WeekColumnItem(data = item)
+            SwipeRefreshLayout(isRefreshing = refreshing?:false, onRefresh = onRefresh) {
+                LazyColumn(
+                    Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    //当前天气信息widget
+                    item {
+                        WeatherInfoTpoWidget(city,weatherData, airNowData, weatherWeekData)
                     }
-                }
-                item {
-                    Text(
-                        text = "数据来源:和风天气",
-                        Modifier.padding(top = 20.dp, bottom = 20.dp),
-                        fontSize = 12.sp,
-                        color = colorTextDefault
-                    )
+                    item {
+                        HourRowList(weather24HourlyData?.hourlyList)
+                    }
+                    weatherWeekData?.dailyList?.let {
+                        itemsIndexed(items = it) { index, item ->
+                            WeekColumnItem(data = item)
+                        }
+                    }
+                    item {
+                        Text(
+                            text = "数据来源:和风天气",
+                            Modifier.padding(top = 20.dp, bottom = 20.dp),
+                            fontSize = 12.sp,
+                            color = colorTextDefault
+                        )
+                    }
                 }
             }
         },
@@ -77,7 +82,7 @@ fun HomePage(
 @Composable
 fun DefaultPreview() {
     SpringBreezeTheme {
-        HomePage("北京", null, null, null, null)
+        HomePage("北京", null, null, null, null, true,{  })
     }
 }
 
