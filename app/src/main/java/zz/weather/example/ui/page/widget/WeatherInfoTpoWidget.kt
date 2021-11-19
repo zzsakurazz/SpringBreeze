@@ -1,16 +1,23 @@
 package zz.weather.example.ui.page.widget
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import zz.weather.example.R
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import kotlinx.coroutines.delay
 import zz.weather.example.bean.AirNowBeanState
 import zz.weather.example.bean.WeatherNowBeanState
 import zz.weather.example.bean.WeatherWeekState
@@ -24,6 +31,7 @@ import zz.weather.example.utlis.isNight
 /**
  * 顶部数据widget
  */
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun WeatherInfoTpoWidget(
     city: String?,
@@ -31,14 +39,59 @@ fun WeatherInfoTpoWidget(
     airNowData: AirNowBeanState?,
     weatherWeekData: WeatherWeekState?
 ) {
+    var state by remember{ mutableStateOf(false)}
+    LaunchedEffect(key1 = true) {
+        state = true
+        delay(1200)
+    }
+    val infiniteTransition = rememberInfiniteTransition()
+    val offset by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 10f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1600, easing = FastOutLinearInEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(720.dp)
+            .height(520.dp)
             .background(
                 color = if (isNight()) colorNight else colorDay
             ),
     ) {
+        AnimatedVisibility(
+            visible = state,
+            enter = slideInHorizontally(
+                initialOffsetX = { -1800 },
+                animationSpec = tween(durationMillis = 2500)
+            ),
+            modifier = Modifier
+                .align(alignment = Alignment.BottomCenter)
+                .padding(bottom = 70.dp, start = 80.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_cloud),
+                contentDescription = "云彩",
+                modifier = Modifier.size(60.dp).offset(x=0.dp,y = offset.dp)
+            )
+        }
+        AnimatedVisibility(
+            visible = state,
+            enter = fadeIn(
+                animationSpec = tween(durationMillis = 2000)
+            ),
+            modifier = Modifier
+                .align(alignment = Alignment.BottomCenter)
+                .padding(start = 160.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_rain_ground),
+                contentDescription = "小房子",
+
+            )
+        }
         Row(
             Modifier
                 .height(60.dp)//todo 处理顶部状态栏高度问题
@@ -46,7 +99,7 @@ fun WeatherInfoTpoWidget(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
         ) {
-            Text(text = city?:"城市", color = Color.White, fontSize = 16.sp)
+            Text(text = city ?: "城市", color = Color.White, fontSize = 16.sp)
         }
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -110,5 +163,5 @@ fun WeatherInfoTpoWidget(
 @Preview(showBackground = true)
 @Composable
 fun WeatherInfoTpoWidgetPreview() {
-    SpringBreezeTheme { WeatherInfoTpoWidget("北京",null, null, null) }
+    SpringBreezeTheme { WeatherInfoTpoWidget("北京", null, null, null) }
 }
