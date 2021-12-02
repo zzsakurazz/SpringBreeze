@@ -14,7 +14,7 @@ Compose练手项目-天气APP-重构版本
 
 - APP页面
 
-<img src="device-2021-11-19-130750.png" style="zoom:20%;" />
+  <img src="device-2021-11-19-130750.png" style="zoom:20%;" />
 
 - Gif效果
 
