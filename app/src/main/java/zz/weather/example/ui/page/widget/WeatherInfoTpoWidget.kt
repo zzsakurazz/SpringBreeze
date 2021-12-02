@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import zz.weather.example.bean.AirNowBeanState
 import zz.weather.example.bean.WeatherNowBeanState
@@ -27,6 +28,7 @@ import zz.weather.example.ui.theme.colorNight
 import zz.weather.example.ui.view.DividerAlpha
 import zz.weather.example.ui.view.VerticalDivider
 import zz.weather.example.utlis.isNight
+import zz.weather.example.vm.MainViewModel
 
 /**
  * 顶部数据widget
@@ -74,7 +76,9 @@ fun WeatherInfoTpoWidget(
             Image(
                 painter = painterResource(id = R.drawable.ic_cloud),
                 contentDescription = "云彩",
-                modifier = Modifier.size(60.dp).offset(x=0.dp,y = offset.dp)
+                modifier = Modifier
+                    .size(60.dp)
+                    .offset(x = 0.dp, y = offset.dp)
             )
         }
         AnimatedVisibility(
@@ -105,7 +109,7 @@ fun WeatherInfoTpoWidget(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ConstraintLayout(modifier = Modifier.padding(top = 170.dp)) {
+            ConstraintLayout(modifier = Modifier.padding(top = 130.dp)) {
                 val (temp, info) = createRefs()
                 Text(
                     fontSize = 84.sp,
