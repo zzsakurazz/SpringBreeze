@@ -21,6 +21,7 @@ import zz.weather.example.ui.page.widget.HourRowList
 import zz.weather.example.ui.theme.SpringBreezeTheme
 import zz.weather.example.ui.page.widget.WeatherInfoTpoWidget
 import zz.weather.example.ui.page.widget.WeekColumnItem
+import zz.weather.example.ui.page.widget.HomeTopBar
 
 /**
  * @author zhangzheng
@@ -35,31 +36,44 @@ fun HomePage(
     weatherData: WeatherNowBeanState?,
     airNowData: AirNowBeanState?,
     weather24HourlyData: Weather24HourlyState?,
-    weatherWeekData: WeatherWeekState?
+    weatherWeekData:WeatherWeekState?
 ) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
+        // 脚手架的状态
         scaffoldState = scaffoldState,
-        //屏幕内容区域
+        // 顶部区域
+        topBar = {
+            HomeTopBar(city, scaffoldState)
+        },
+        drawerContent = {
+            Box(
+                Modifier
+                    .background(color = SpringBreezeTheme.colors.background)
+                    .padding(top = 20.dp)
+            ) {
+
+            }
+        },
+        // 屏幕内容区域
         content = {
-            //TODO 嵌套待优化
             LazyColumn(
-                Modifier.fillMaxSize().background(color = SpringBreezeTheme.colors.background),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = SpringBreezeTheme.colors.background),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // 当前天气信息widget
                 item {
-                    WeatherInfoTpoWidget(city,weatherData, airNowData, weatherWeekData)
+                    WeatherInfoTpoWidget(weatherData, airNowData, weatherWeekData)
                 }
                 // 当前24小时横向列表
                 item {
-                    HourRowList(weather24HourlyData?.hourlyList)
+                    HourRowList(weather24HourlyData ?.hourlyList)
                 }
                 // 未来一周的竖向列表
-                weatherWeekData?.dailyList?.let {
-                    itemsIndexed(items = it) { index, item ->
-                        WeekColumnItem(data = item)
-                    }
+                itemsIndexed(weatherWeekData ?.dailyList ?: arrayListOf()) { _, item ->
+                    WeekColumnItem(data = item)
                 }
                 // 天气来源说明
                 item {
@@ -80,7 +94,6 @@ fun HomePage(
 @Composable
 fun DefaultPreview() {
     SpringBreezeTheme {
-        HomePage("北京", null, null, null, null)
     }
 }
 

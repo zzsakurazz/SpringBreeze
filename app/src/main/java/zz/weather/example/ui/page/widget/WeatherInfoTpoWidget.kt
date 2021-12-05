@@ -10,22 +10,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.delay
 import zz.weather.example.bean.AirNowBeanState
 import zz.weather.example.bean.WeatherNowBeanState
 import zz.weather.example.bean.WeatherWeekState
 import zz.weather.example.ui.theme.SpringBreezeTheme
-import zz.weather.example.ui.theme.sunnyLight
-import zz.weather.example.ui.theme.sunnyNight
-import zz.weather.example.ui.view.DividerAlpha
 import zz.weather.example.ui.view.VerticalDivider
-import zz.weather.example.utlis.isNight
 
 /**
  * 顶部数据widget
@@ -33,12 +29,11 @@ import zz.weather.example.utlis.isNight
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun WeatherInfoTpoWidget(
-    city: String?,
     weatherData: WeatherNowBeanState?,
     airNowData: AirNowBeanState?,
     weatherWeekData: WeatherWeekState?
 ) {
-    var state by remember{ mutableStateOf(false)}
+    var state by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = true) {
         state = true
         delay(1200)
@@ -91,26 +86,18 @@ fun WeatherInfoTpoWidget(
                 painter = painterResource(id = R.drawable.ic_rain_ground),
                 contentDescription = "小房子",
 
-            )
+                )
         }
-        Row(
-            Modifier
-                .height(60.dp)//todo 处理顶部状态栏高度问题
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Bottom
-        ) {
-            Text(text = city ?: "城市", color = SpringBreezeTheme.colors.topText, fontSize = 16.sp)
-        }
+
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ConstraintLayout(modifier = Modifier.padding(top = 130.dp)) {
+            ConstraintLayout(modifier = Modifier.padding(top = 100.dp)) {
                 val (temp, info) = createRefs()
                 Text(
                     fontSize = 84.sp,
-                    text = "${weatherData?.temp ?: "--"}°",
+                    text = "${weatherData ?.temp ?: "--"}°",
                     color = SpringBreezeTheme.colors.topText,
                     modifier = Modifier.constrainAs(temp) {
                         start.linkTo(parent.start)
@@ -128,13 +115,13 @@ fun WeatherInfoTpoWidget(
                 ) {
                     Text(
                         fontSize = 20.sp,
-                        text = weatherData?.text ?: "未知",
+                        text = weatherData ?.text ?: "未知",
                         color = SpringBreezeTheme.colors.topText,
                     )
                     Spacer(Modifier.height(4.dp))
-                    MaxTemp(weatherWeekData?.dailyList?.get(0)?.tempMax ?: "--", true)
+                    MaxTemp(weatherWeekData ?.dailyList?.get(0)?.tempMax ?: "--", true)
                     Spacer(Modifier.height(8.dp))
-                    MaxTemp(weatherWeekData?.dailyList?.get(0)?.tempMin ?: "--", false)
+                    MaxTemp(weatherWeekData ?.dailyList?.get(0)?.tempMin ?: "--", false)
                 }
             }
             Row(
@@ -144,13 +131,14 @@ fun WeatherInfoTpoWidget(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                MoreInfo("${weatherData?.humidity ?: "--"}%", "湿度")
+                MoreInfo("${weatherData ?.humidity ?: "--"}%", "湿度")
                 VerticalDivider(height = 35.dp, color = SpringBreezeTheme.colors.divider)
-                MoreInfo(airNowData?.pm2p5 ?: "--", "pm2.5")
+                MoreInfo(airNowData ?.pm2p5 ?: "--", "pm2.5")
                 VerticalDivider(height = 35.dp, color = SpringBreezeTheme.colors.divider)
                 MoreInfo(
-                    "${weatherData?.windScale ?: "--"}级",
-                    if (weatherData?.windDir.isNullOrEmpty()) "风力" else weatherData?.windDir ?: ""
+                    "${weatherData ?.windScale ?: "--"}级",
+                    if (weatherData ?.windDir.isNullOrEmpty()) "风力" else weatherData ?.windDir
+                        ?: ""
                 )
 
             }
@@ -158,11 +146,4 @@ fun WeatherInfoTpoWidget(
         }
     }
 
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun WeatherInfoTpoWidgetPreview() {
-    SpringBreezeTheme { WeatherInfoTpoWidget("北京", null, null, null) }
 }
