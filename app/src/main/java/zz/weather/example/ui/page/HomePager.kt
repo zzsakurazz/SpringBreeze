@@ -1,5 +1,6 @@
-package zz.weather.example.ui.view.home
+package zz.weather.example.ui.page
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -20,7 +21,6 @@ import zz.weather.example.ui.page.widget.HourRowList
 import zz.weather.example.ui.theme.SpringBreezeTheme
 import zz.weather.example.ui.page.widget.WeatherInfoTpoWidget
 import zz.weather.example.ui.page.widget.WeekColumnItem
-import zz.weather.example.ui.theme.colorTextDefault
 
 /**
  * @author zhangzheng
@@ -44,27 +44,30 @@ fun HomePage(
         content = {
             //TODO 嵌套待优化
             LazyColumn(
-                Modifier.fillMaxSize(),
+                Modifier.fillMaxSize().background(color = SpringBreezeTheme.colors.background),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                //当前天气信息widget
+                // 当前天气信息widget
                 item {
                     WeatherInfoTpoWidget(city,weatherData, airNowData, weatherWeekData)
                 }
+                // 当前24小时横向列表
                 item {
                     HourRowList(weather24HourlyData?.hourlyList)
                 }
+                // 未来一周的竖向列表
                 weatherWeekData?.dailyList?.let {
                     itemsIndexed(items = it) { index, item ->
                         WeekColumnItem(data = item)
                     }
                 }
+                // 天气来源说明
                 item {
                     Text(
                         text = "数据来源:和风天气",
                         Modifier.padding(top = 20.dp, bottom = 20.dp),
                         fontSize = 12.sp,
-                        color = colorTextDefault
+                        color = SpringBreezeTheme.colors.listText
                     )
                 }
             }

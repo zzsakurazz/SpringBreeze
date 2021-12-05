@@ -2,6 +2,9 @@ package zz.weather.example.vm
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +22,8 @@ import zz.weather.example.bean.AirNowBeanState
 import zz.weather.example.bean.Weather24HourlyState
 import zz.weather.example.bean.WeatherNowBeanState
 import zz.weather.example.bean.WeatherWeekState
+import zz.weather.example.ui.theme.SpringBreezeTheme
+import zz.weather.example.utlis.isNight
 
 /**
  * @author zhangzheng
@@ -50,9 +55,10 @@ class MainViewModel : ViewModel() {
     private val _city = MutableLiveData<String>()
     val city: LiveData<String> = _city
 
+    var theme by mutableStateOf(if (isNight()) SpringBreezeTheme.Theme.Dark else SpringBreezeTheme.Theme.Light)
 
-    fun refreshWatherData(context: Context, location: AMapLocation) {
-        _city.value=if(location.district.isNullOrEmpty()) location.city else location.district
+    fun refreshWeatherData(context: Context, location: AMapLocation) {
+        _city.value = if (location.district.isNullOrEmpty()) location.city else location.district
         QWeather.getGeoCityLookup(
             context,
             _city.value,
@@ -75,7 +81,7 @@ class MainViewModel : ViewModel() {
 
 
     private fun resultWeatherWeek(context: Context, id: String?) {
-        val list= mutableListOf<IndicesType>()
+        val list = mutableListOf<IndicesType>()
         list.add(IndicesType.ALL)
         QWeather.getWeather7D(
             context,
@@ -119,6 +125,7 @@ class MainViewModel : ViewModel() {
                 override fun onError(error: Throwable?) {
                     error?.printStackTrace()
                 }
+
                 override fun onSuccess(data: AirNowBean?) {
                     data?.let {
                         _airNowData.value = AirNowBeanState(data.now.pm2p5)

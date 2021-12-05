@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import zz.weather.example.ui.theme.SpringBreezeTheme
-import zz.weather.example.ui.theme.colorTextDefault
 import zz.weather.example.utlis.UTC_TIME
 import zz.weather.example.utlis.codeToIcon
 import zz.weather.example.utlis.formatDate
@@ -36,7 +35,7 @@ fun HourRowList(datas: List<WeatherHourlyBean.HourlyBean>?) {
                         text = "${item.temp}°C",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.W400,
-                        color = colorTextDefault
+                        color = SpringBreezeTheme.colors.listText
                     )
                     Spacer(Modifier.height(10.dp))
                     Image(
@@ -48,7 +47,7 @@ fun HourRowList(datas: List<WeatherHourlyBean.HourlyBean>?) {
                     Text(
                         text = processTime(formatDate(UTC_TIME, "HH", item.fxTime)),
                         fontSize = 12.sp,
-                        color = colorTextDefault
+                        color = SpringBreezeTheme.colors.listText
                     )
                 }
             }

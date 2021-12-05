@@ -12,7 +12,7 @@ import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.google.accompanist.insets.ProvideWindowInsets
 import pub.devrel.easypermissions.AfterPermissionGranted
-import zz.weather.example.ui.view.home.HomePage
+import zz.weather.example.ui.page.HomePage
 import zz.weather.example.ui.theme.SpringBreezeTheme
 import zz.weather.example.vm.MainViewModel
 import pub.devrel.easypermissions.EasyPermissions
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
         mLocationClient?.startLocation()
         mLocationClient?.setLocationListener { location ->
             if(location.errorCode==0){
-                viewModel.refreshWatherData(this,location)
+                viewModel.refreshWeatherData(this,location)
             }else{
               // todo 失败处理
             }
@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
             val weatherWeekData by viewModel.weatherWeekData.observeAsState()
             val weather24HourlyData by viewModel.weather24HourlyData.observeAsState()
             val city by viewModel.city.observeAsState()
-            SpringBreezeTheme {
+            SpringBreezeTheme(viewModel.theme) {
                 ProvideWindowInsets {
                     HomePage(city,weatherData, airNowData,weather24HourlyData ,weatherWeekData)
                 }

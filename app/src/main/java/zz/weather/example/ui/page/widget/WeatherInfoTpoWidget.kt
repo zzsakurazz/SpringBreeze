@@ -10,25 +10,22 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import zz.weather.example.bean.AirNowBeanState
 import zz.weather.example.bean.WeatherNowBeanState
 import zz.weather.example.bean.WeatherWeekState
 import zz.weather.example.ui.theme.SpringBreezeTheme
-import zz.weather.example.ui.theme.colorDay
-import zz.weather.example.ui.theme.colorNight
+import zz.weather.example.ui.theme.sunnyLight
+import zz.weather.example.ui.theme.sunnyNight
 import zz.weather.example.ui.view.DividerAlpha
 import zz.weather.example.ui.view.VerticalDivider
 import zz.weather.example.utlis.isNight
-import zz.weather.example.vm.MainViewModel
 
 /**
  * 顶部数据widget
@@ -60,7 +57,7 @@ fun WeatherInfoTpoWidget(
             .fillMaxWidth()
             .height(520.dp)
             .background(
-                color = if (isNight()) colorNight else colorDay
+                color = SpringBreezeTheme.colors.sunny
             ),
     ) {
         AnimatedVisibility(
@@ -103,7 +100,7 @@ fun WeatherInfoTpoWidget(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
         ) {
-            Text(text = city ?: "城市", color = Color.White, fontSize = 16.sp)
+            Text(text = city ?: "城市", color = SpringBreezeTheme.colors.topText, fontSize = 16.sp)
         }
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -114,7 +111,7 @@ fun WeatherInfoTpoWidget(
                 Text(
                     fontSize = 84.sp,
                     text = "${weatherData?.temp ?: "--"}°",
-                    color = Color.White,
+                    color = SpringBreezeTheme.colors.topText,
                     modifier = Modifier.constrainAs(temp) {
                         start.linkTo(parent.start)
                     }
@@ -132,7 +129,7 @@ fun WeatherInfoTpoWidget(
                     Text(
                         fontSize = 20.sp,
                         text = weatherData?.text ?: "未知",
-                        color = Color.White,
+                        color = SpringBreezeTheme.colors.topText,
                     )
                     Spacer(Modifier.height(4.dp))
                     MaxTemp(weatherWeekData?.dailyList?.get(0)?.tempMax ?: "--", true)
@@ -148,9 +145,9 @@ fun WeatherInfoTpoWidget(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 MoreInfo("${weatherData?.humidity ?: "--"}%", "湿度")
-                VerticalDivider(height = 35.dp, color = Color.White.copy(alpha = DividerAlpha))
+                VerticalDivider(height = 35.dp, color = SpringBreezeTheme.colors.divider)
                 MoreInfo(airNowData?.pm2p5 ?: "--", "pm2.5")
-                VerticalDivider(height = 35.dp, color = Color.White.copy(alpha = DividerAlpha))
+                VerticalDivider(height = 35.dp, color = SpringBreezeTheme.colors.divider)
                 MoreInfo(
                     "${weatherData?.windScale ?: "--"}级",
                     if (weatherData?.windDir.isNullOrEmpty()) "风力" else weatherData?.windDir ?: ""
