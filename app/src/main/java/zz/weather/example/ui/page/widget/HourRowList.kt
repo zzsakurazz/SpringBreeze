@@ -20,13 +20,13 @@ import zz.weather.example.utlis.codeToIcon
 import zz.weather.example.utlis.formatDate
 
 @Composable
-fun HourRowList(datas: List<WeatherHourlyBean.HourlyBean>?) {
+fun HourRowList(list: List<WeatherHourlyBean.HourlyBean>?) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 23.dp, vertical = 23.dp),//边距距离
         horizontalArrangement = Arrangement.spacedBy(38.dp),//内部item间距
     ) {
-        datas?.let {
+        list?.let {
             itemsIndexed(items = it) { _, item ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally

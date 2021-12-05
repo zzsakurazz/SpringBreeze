@@ -25,6 +25,7 @@ import zz.weather.example.ui.view.VerticalDivider
 
 /**
  * 顶部数据widget
+ * TODO 想想如何封装动画
  */
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -33,11 +34,13 @@ fun WeatherInfoTpoWidget(
     airNowData: AirNowBeanState?,
     weatherWeekData: WeatherWeekState?
 ) {
+    // 延迟显示
     var state by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = true) {
         state = true
         delay(1200)
     }
+    // 无限循环位移动画
     val infiniteTransition = rememberInfiniteTransition()
     val offset by infiniteTransition.animateFloat(
         initialValue = 0f,
