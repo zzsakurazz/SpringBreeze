@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,11 +15,8 @@ import zz.weather.example.bean.AirNowBeanState
 import zz.weather.example.bean.Weather24HourlyState
 import zz.weather.example.bean.WeatherNowBeanState
 import zz.weather.example.bean.WeatherWeekState
-import zz.weather.example.ui.page.widget.HourRowList
+import zz.weather.example.ui.page.widget.*
 import zz.weather.example.ui.theme.SpringBreezeTheme
-import zz.weather.example.ui.page.widget.WeatherInfoTpoWidget
-import zz.weather.example.ui.page.widget.WeekColumnItem
-import zz.weather.example.ui.page.widget.HomeTopBar
 
 /**
  * @author zhangzheng
@@ -36,7 +31,7 @@ fun HomePage(
     weatherData: WeatherNowBeanState?,
     airNowData: AirNowBeanState?,
     weather24HourlyData: Weather24HourlyState?,
-    weatherWeekData:WeatherWeekState?
+    weatherWeekData: WeatherWeekState?
 ) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
@@ -47,13 +42,7 @@ fun HomePage(
             HomeTopBar(city, scaffoldState)
         },
         drawerContent = {
-            Box(
-                Modifier
-                    .background(color = SpringBreezeTheme.colors.background)
-                    .padding(top = 20.dp)
-            ) {
-
-            }
+            HomeDrawerContent()
         },
         // 屏幕内容区域
         content = {
@@ -69,10 +58,10 @@ fun HomePage(
                 }
                 // 当前24小时横向列表
                 item {
-                    HourRowList(weather24HourlyData ?.hourlyList)
+                    HourRowList(weather24HourlyData?.hourlyList)
                 }
                 // 未来一周的竖向列表
-                itemsIndexed(weatherWeekData ?.dailyList ?: arrayListOf()) { _, item ->
+                itemsIndexed(weatherWeekData?.dailyList ?: arrayListOf()) { _, item ->
                     WeekColumnItem(data = item)
                 }
                 // 天气来源说明
